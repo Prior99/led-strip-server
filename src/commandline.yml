@@ -1,0 +1,22 @@
+name: led-strip-server
+version: 0.0.1
+author: Frederick Gnodtke
+about: Receive RGB color signals and control a LED strip.
+subcommands:
+  - start:
+      about: Start the server.
+      args:
+        - host:
+            short: h
+            long: host
+            help: The host to listen on.
+            takes_value: true
+            required: true
+            default_value: "0.0.0.0"
+        - port:
+            short: p
+            long: port
+            help: The port to listen on.
+            takes_value: true
+            required: true
+            default_value: "80"

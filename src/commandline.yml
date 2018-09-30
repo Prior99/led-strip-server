@@ -2,6 +2,11 @@ name: led-strip-server
 version: 0.0.1
 author: Frederick Gnodtke
 about: Receive RGB color signals and control a LED strip.
+args:
+  - verbose:
+      short: v
+      long: verbose
+      help: Enable verbose logging.
 subcommands:
   - start:
       about: Start the server.

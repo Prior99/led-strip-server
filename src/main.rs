@@ -62,7 +62,13 @@ fn main() {
 
             info!("Listening for new websocket connections on {}", address);
             let mut broadcaster: Arc<RefCell<Option<Sender>>> = Arc::new(RefCell::new(None));
-            let server_socket = WebSocket::new(|_| {
+            let server_socket = WebSocket::new(|socket: Sender| {
+                {
+                    let json = serde_json::to_string(&leds.lock().unwrap().state).unwrap();
+                    if let Err(error) = socket.send(Message::text(json)) {
+                        warn!("Failed to send initial message to client: {:?}", error);
+                    }
+                }
                 |msg| {
                     let color = message_to_color(msg);
                     let json = serde_json::to_string(&color).unwrap();

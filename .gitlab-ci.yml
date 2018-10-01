@@ -31,6 +31,7 @@ deploy:
     - chmod 600 ~/.ssh/id_rsa
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
   script:
+    - export ANSIBLE_CONFIG=./ansible.cfg
     - cd deploy
     - ansible-playbook colorpi.yml
   dependencies:

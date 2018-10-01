@@ -1,0 +1,41 @@
+image: ubuntu:18.10
+
+stages:
+  - build
+  - deploy
+
+before_script:
+  - apt update -qq
+  - apt install curl gcc -qq -y
+  - curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly -y
+
+build:
+  stage: build
+  script:
+    - apt install gcc-arm-linux-gnueabihf -qq -y
+    - export PATH=$PATH:$HOME/.cargo/bin
+    - echo -e '[target.armv7-unknown-linux-gnueabihf]\nlinker = "arm-linux-gnueabihf-gcc"' > $HOME/.cargo/config
+    - cat $HOME/.cargo/config
+    - rustup target add armv7-unknown-linux-gnueabihf
+    - cargo build --target armv7-unknown-linux-gnueabihf --release
+  artifacts:
+    paths:
+      - target/armv7-unknown-linux-gnueabihf/release/led-strip-server
+
+deploy:
+  image: "alpine:3.7"
+  before_script:
+    - apk --update add ansible git openssh python py2-pip rsync gnupg
+    - mkdir ~/.ssh
+    - echo "$SSH_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+  script:
+    - cd deploy
+    - ansible-playbook colorpi.yml
+  dependencies:
+    - build
+  stage: deploy
+  when: manual
+  only:
+    - master

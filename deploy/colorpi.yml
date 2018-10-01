@@ -1,0 +1,10 @@
+- name: Setup Color-PI
+  hosts: colorpi
+  remote_user: ansible
+  vars:
+    hostname: colorpi
+  roles:
+    - sshd
+    - tools
+    - nginx
+    - led-strip-server

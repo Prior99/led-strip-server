@@ -1,0 +1,14 @@
+[Unit]
+Description=LED Strip server
+After=network.target
+
+[Service]
+TimeoutStartSec=5
+WorkingDirectory=/led-strip-server/
+ExecStart=/led-strip-server/led-strip-server start --port 7305
+TimeoutStopSec=10
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi.target

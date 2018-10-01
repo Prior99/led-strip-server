@@ -1,0 +1,31 @@
+---
+
+- name: create directory
+  become: true
+  file: path=/led-strip-server state=directory
+
+- name: copy files
+  become: true
+  synchronize:
+    src: "{{ item }}"
+    dest: /led-strip-server
+  with_items:
+    - ../target/armv7-unknown-linux-gnueabihf/release/led-strip-server
+
+- name: add systemd unit files
+  become: true
+  template:
+    src: '{{ item }}.j2'
+    dest: '/etc/systemd/system/{{ item }}'
+  with_items:
+    led-strip-server.service
+
+- name: enable and start the services
+  become: true
+  service:
+    name: '{{ item }}'
+    state: restarted
+    enabled: yes
+    daemon-reload: yes
+  with_items:
+    - led-strip-server

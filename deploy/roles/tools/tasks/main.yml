@@ -1,0 +1,15 @@
+- name: install sysadmin tools
+  pacman: name=mpv,lsof,htop,iftop,rsync,tmux,mtr,sshfs,tree,net-tools,ncdu state=present
+  become: true
+
+- name: install misc utils
+  pacman: name=zsh,colordiff,multitail,httpie,the_silver_searcher,calc,wget,neovim,python2-neovim,wpa_supplicant,dialog state=present
+  become: true
+
+- name: install development stuff
+  pacman: name=git,base-devel state=present
+  become: true
+
+- name: configure sudo
+  template: src=sudoers.j2 dest=/etc/sudoers owner=root group=root mode=0440
+  become: true

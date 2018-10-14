@@ -33,7 +33,7 @@ deploy:
   script:
     - export ANSIBLE_CONFIG=./ansible.cfg
     - cd deploy
-    - ansible-playbook colorpi.yml
+    - ansible-playbook home.yml
   dependencies:
     - build
   stage: deploy

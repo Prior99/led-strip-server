@@ -1,0 +1,7 @@
+- name: Setup led strip on home
+  hosts: home
+  remote_user: ansible
+  vars:
+    hostname: home
+  roles:
+    - led-strip-server

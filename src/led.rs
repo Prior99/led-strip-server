@@ -1,4 +1,4 @@
-use wiringpi::pin::{SoftPwmPin, Gpio};
+use wiringpi::pin::{Gpio, SoftPwmPin};
 use wiringpi::WiringPi;
 
 pub struct Led {
@@ -8,7 +8,7 @@ pub struct Led {
 impl Led {
     pub fn new(pin_id: u16, pi: &WiringPi<Gpio>) -> Led {
         Led {
-            pin: pi.soft_pwm_pin(pin_id)
+            pin: pi.soft_pwm_pin(pin_id),
         }
     }
 

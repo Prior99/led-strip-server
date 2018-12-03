@@ -15,27 +15,25 @@ mod color;
 mod led;
 mod leds;
 
-use std::sync::{Arc, Mutex};
-use std::cell::RefCell;
-use ws::{Message, Sender, WebSocket};
 use color::Color;
 use leds::Leds;
+use std::cell::RefCell;
+use std::sync::{Arc, Mutex};
+use ws::{Message, Sender, WebSocket};
 
 fn message_to_color(message: Message) -> Color {
     match message {
-        Message::Text(json) => {
-            match serde_json::from_str(&json) {
-                Err(_) => Color::new(0, 0, 0),
-                Ok(value) => value,
-            }
+        Message::Text(json) => match serde_json::from_str(&json) {
+            Err(_) => Color::new(0, 0, 0),
+            Ok(value) => value,
         },
-        Message::Binary (bin) => {
+        Message::Binary(bin) => {
             if bin.len() != 3 {
                 Color::new(0, 0, 0)
             } else {
                 Color::new(bin[0], bin[1], bin[2])
             }
-        },
+        }
     }
 }
 
@@ -81,12 +79,13 @@ fn main() {
                     }
                     Ok(())
                 }
-            }).expect("Unable to create websocket.");
+            })
+            .expect("Unable to create websocket.");
             broadcaster.replace(Some(server_socket.broadcaster()));
             if let Err(error) = server_socket.listen(address.clone()) {
                 error!("Error opening socket on {}: {:?}", address, error);
             };
-        },
+        }
         ("", None) => println!("Unkown command"),
         _ => unreachable!(),
     }

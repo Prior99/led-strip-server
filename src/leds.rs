@@ -1,7 +1,7 @@
+use color::Color;
+use led::Led;
 use wiringpi::pin::Gpio;
 use wiringpi::WiringPi;
-use led::Led;
-use color::Color;
 
 const PIN_RED: u16 = 22;
 const PIN_GREEN: u16 = 17;
